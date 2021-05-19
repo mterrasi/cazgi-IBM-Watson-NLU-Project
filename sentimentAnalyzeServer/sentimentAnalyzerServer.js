@@ -13,9 +13,9 @@ function getNLUInstance (){
         version: '2020-08-01',
         authenticator: new IamAuthenticator({
             apikey: api_key,
-    }),
-    serviceUrl: api_url,
-});
+        }),
+        serviceUrl: api_url,
+    });
 return naturalLanguageUnderstanding;
 }
 
@@ -29,7 +29,6 @@ app.get("/",(req,res)=>{
   });
 
 app.get("/url/emotion", (req,res) => {
-
     return res.send({"happy":"90","sad":"10"});
 });
 
