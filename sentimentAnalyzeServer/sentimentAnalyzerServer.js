@@ -1,5 +1,6 @@
 const express = require('express');
 const app = new express();
+const dotenv = require('dotenv');
 dotenv.config();
 
 function getNLUInstance (){
@@ -29,19 +30,47 @@ app.get("/",(req,res)=>{
   });
 
 app.get("/url/emotion", (req,res) => {
-    return res.send({"happy":"90","sad":"10"});
+    getNLUInstance().analyze(req.query.url)
+        .then(analysisResults => {
+            console.log(JSON.stringify(analysisResults, null, 2));
+            return res.send(analysisResults.emotion.document.emotion);
+        })
+        .catch(err => {
+            console.log('error', err);
+        })
 });
 
 app.get("/url/sentiment", (req,res) => {
-    return res.send("url sentiment for "+req.query.url);
+    getNLUInstance().analyze(req.query.url)
+        .then(analysisResults => {
+            console.log(JSON.stringify(analysisResults, null, 2));
+            return res.send(analysisResults.sentiment.targets);
+        })
+        .catch(err => {
+            console.log('error', err);
+        })
 });
 
 app.get("/text/emotion", (req,res) => {
-    return res.send({"happy":"10","sad":"90"});
+    getNLUInstance().analyze(req.query.text)
+    .then(analysisResults => {
+        console.log(JSON.stringify(analysisResults, null, 2));
+        return res.send(analysisResults.emotion.document.emotion);
+    })
+    .catch(err => {
+        console.log('error', err);
+    })
 });
 
 app.get("/text/sentiment", (req,res) => {
-    return res.send("text sentiment for "+req.query.text);
+    getNLUInstance().analyze(req.query.text)
+        .then(analysisResults => {
+            console.log(JSON.stringify(analysisResults, null, 2));
+            return res.send(analysisResults.sentiment.targets);
+        })
+        .catch(err => {
+            console.log('error', err);
+        })
 });
 
 let server = app.listen(8080, () => {
